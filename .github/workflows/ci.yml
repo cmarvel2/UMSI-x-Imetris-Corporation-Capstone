@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout repo
+              uses: actions/checkout@v7
+
+            - name: setup python
+              uses: actions/setup-python@v7
+              with:
+                python-version: '3.14'
+
+            - name: Install the latest version of uv
+              uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+
+            - name: install dependencies
+              run: uv sync --locked
+
+            - name: create env vars
+              run: cp .env.example .env
+
+            - name: validate docker compose
+              run: docker compose config --quiet
+
+            - name: build airflow 
+              run: docker compose build 
+
+            
+
+            
+
+            

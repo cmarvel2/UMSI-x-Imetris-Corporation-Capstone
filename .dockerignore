@@ -1,0 +1,8 @@
+.venv
+.env
+.git/
+local_data_lake/
+.vscode/
+config/
+logs/
+compose/

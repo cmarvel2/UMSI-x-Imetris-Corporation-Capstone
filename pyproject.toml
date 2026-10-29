@@ -1,0 +1,27 @@
+[project]
+name = "umsi-x-imetris-corporation-capstone"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Corey Royster", email = "cmarvel@umich.edu" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "apache-airflow>=3.3.2",
+    "cryptography>=50.0.1",
+    "polars>=2.0.0",
+    "psycopg[binary]>=3.3.5",
+    "pytest>=9.1.1",
+    "pyx12>=4.0.0",
+    "scikit-learn>=1.9.1",
+    "sqlalchemy>=2.0.52",
+    "xgboost>=3.4.1",
+]
+
+[project.scripts]
+
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
