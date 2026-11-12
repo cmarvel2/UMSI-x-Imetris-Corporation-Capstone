@@ -1,0 +1,109 @@
+[
+  {
+    "id": "employee_termination",
+    "source_document": "Valid - Employee Termination.docx",
+    "members": 1,
+    "raw_valid": true,
+    "raw_error_fragments": [],
+    "business_valid": true
+  },
+  {
+    "id": "ml_logical_anomalies",
+    "source_document": "Invalid - ML Logical Anomalies (Phase 3 Targets).docx",
+    "members": 2,
+    "raw_valid": false,
+    "raw_error_fragments": [
+      "SE count"
+    ],
+    "business_valid": false
+  },
+  {
+    "id": "single_new_hire",
+    "source_document": "Valid - Standard Single New Hire.docx",
+    "members": 1,
+    "raw_valid": false,
+    "raw_error_fragments": [
+      "SE count"
+    ],
+    "business_valid": true
+  },
+  {
+    "id": "newborn_addition",
+    "source_document": "Valid_ Dependent Addition (Newborn_Qualifying Life Event).docx",
+    "members": 2,
+    "raw_valid": false,
+    "raw_error_fragments": [
+      "SE count",
+      "NM1*03",
+      "Member Name"
+    ],
+    "business_valid": true
+  },
+  {
+    "id": "address_change",
+    "source_document": "Valid_ Demographic Update (Address Change).docx",
+    "members": 1,
+    "raw_valid": true,
+    "raw_error_fragments": [],
+    "business_valid": true
+  },
+  {
+    "id": "formatting_errors",
+    "source_document": "Invalid - Formatting & Data Type Errors (SNIP 2 Fails).docx",
+    "members": 2,
+    "raw_valid": false,
+    "raw_error_fragments": [
+      "invalid date",
+      "Maintenance Type Code",
+      "SE count"
+    ],
+    "business_valid": false
+  },
+  {
+    "id": "qc_anomalies",
+    "source_document": "QC & Anomaly Test (Invalid ZIP, Duplicate Member ID, Backdated Termination).docx",
+    "members": 3,
+    "raw_valid": true,
+    "raw_error_fragments": [],
+    "business_valid": false
+  },
+  {
+    "id": "clean_family",
+    "source_document": "Clean Family Enrollment (Subscriber + Spouse + Child).docx",
+    "members": 3,
+    "raw_valid": false,
+    "raw_error_fragments": [
+      "SE count",
+      "NM1*03",
+      "Member Name"
+    ],
+    "business_valid": true
+  },
+  {
+    "id": "staggered_coverage",
+    "source_document": "Valid_ Staggered Coverage Dates (1_Many Relationship Test).docx",
+    "members": 1,
+    "raw_valid": true,
+    "raw_error_fragments": [],
+    "business_valid": true
+  },
+  {
+    "id": "full_replacement",
+    "source_document": "Valid_ Full File Replacement _ Audit Batch.docx",
+    "members": 1,
+    "raw_valid": true,
+    "raw_error_fragments": [],
+    "business_valid": true
+  },
+  {
+    "id": "open_enrollment_family",
+    "source_document": "Valid - Open Enrollment Family.docx",
+    "members": 3,
+    "raw_valid": false,
+    "raw_error_fragments": [
+      "NM1*03",
+      "Member Name"
+    ],
+    "business_valid": true
+  }
+]

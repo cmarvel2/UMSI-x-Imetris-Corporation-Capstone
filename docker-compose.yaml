@@ -120,7 +120,18 @@ services:
       retries: 5
       start_period: 5s
     restart: always
-
+  flyway:
+    image: flyway/flyway:13.12.1
+    command: migrate
+    environment:
+      FLYWAY_URL: jdbc:postgresql://db:5432/healthcare_edi
+      FLYWAY_USER: ${POSTGRES_USER}
+      FLYWAY_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./db/migrations:/flyway/sql:ro
+    depends_on:
+      db:
+        condition: service_healthy
   redis:
     # Redis is limited to 7.2-bookworm due to licencing change
     # https://redis.io/blog/redis-adopts-dual-source-available-licensing/
@@ -196,6 +207,8 @@ services:
       <<: *airflow-common-env
       # Required to handle warm shutdown of the celery workers properly
       # See https://airflow.apache.org/docs/docker-stack/entrypoint.html#signal-propagation
+      POSTGRES_HOST: db
+      POSTGRES_PORT: "5432"
       DUMB_INIT_SETSID: "0"
     restart: always
     depends_on:
@@ -203,6 +216,8 @@ services:
       airflow-apiserver:
         condition: service_healthy
       airflow-init:
+        condition: service_completed_successfully
+      flyway:
         condition: service_completed_successfully
 
   airflow-triggerer:

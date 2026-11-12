@@ -33,6 +33,15 @@ jobs:
             - name: build airflow 
               run: docker compose build 
 
+            - name: start up docker
+              run: docker compose up -d --wait
+
+            - name: run unit tests
+              run: uv run pytest tests -m unit
+
+            - name: run integration tests
+              run: uv run pytest tests -m integration
+
             
 
             

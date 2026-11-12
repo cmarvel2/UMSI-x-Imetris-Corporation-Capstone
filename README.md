@@ -55,3 +55,7 @@ This Data Engineering, Machine Learning and Analytics project focuses on transfo
     http://localhost:8080/ enter this into the search bar (You could also just ctrl+click that link)
     username: airflow
     password: airflow
+
+### Table creation and changes
+*docker container must be running*
+    Whenever we create new tables, change existing columns etc... we'll use flyway to make these changes within our postgresql database making it separate from our pipeline logic. Undr db/Migrations each file must start with V#__ where # is +1 of whatever the most recent .sql file's number is. In that file do whatever sql operations you need and then you can run ```docker compose run --rm flyway migrate```. Additionally it is set to automatically run whenever ```docker compose up --build -d``` is executed though running this for each database update shouldn't be necessary.

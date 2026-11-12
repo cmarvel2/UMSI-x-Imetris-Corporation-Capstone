@@ -14,8 +14,8 @@ dependencies = [
     "psycopg[binary]>=3.3.5",
     "pytest>=9.1.1",
     "pyx12>=4.0.0",
+    "ruff>=0.17.4",
     "scikit-learn>=1.9.1",
-    "sqlalchemy>=2.0.52",
     "xgboost>=3.4.1",
 ]
 
