@@ -1,5 +1,3 @@
-"""All test configuration stays here; no application settings are modified."""
-
 import os
 import sys
 from contextlib import contextmanager
@@ -26,27 +24,39 @@ def pytest_configure(config):
 
 @pytest.fixture
 def scenario_file(tmp_path):
-    def write(name, *, corrected=False):
-        content = (FIXTURES / f"{name}.edi").read_text(encoding="utf-8")
-        if corrected:
-            content = corrected_edi(content)
-        path = tmp_path / f"{name}{'_corrected' if corrected else ''}.edi"
-        path.write_text(content, encoding="utf-8")
+    def write(name):
+        content = corrected_edi((FIXTURES / f"{name}.edi").read_text(encoding="utf-8"))
+        path = tmp_path / f"{name}.edi"
+        path.write_text(content, encoding="ascii")
         return path
 
     return write
 
 
 @pytest.fixture
+def edi834_text():
+    content = (FIXTURES / "clean_family.edi").read_text(encoding="utf-8")
+    content = content.replace("N1*P5*", "QTY*TO*3~\nQTY*ET*1~\nQTY*DT*2~\nN1*P5*", 1)
+    return corrected_edi(content)
+
+
+@pytest.fixture
+def edi834_segments(edi834_text):
+    return [
+        segment.strip("\r\n").split("*")
+        for segment in edi834_text.split("~")
+        if segment.strip("\r\n")
+    ]
+
+
+@pytest.fixture
 def recording_database(monkeypatch):
-    """A boundary fake; these unit tests do not claim real DB coverage."""
     from umsi_x_imetris_corporation_capstone.common import edi_parser
 
     state = SimpleNamespace(calls=[], events=[], execute_error=None)
 
     class Cursor:
         def __enter__(self):
-            state.events.append("cursor_enter")
             return self
 
         def execute(self, statement, parameters):
@@ -56,11 +66,9 @@ def recording_database(monkeypatch):
 
         def __exit__(self, exc_type, exc_value, traceback):
             state.events.append(("cursor_exit", exc_type))
-            return False
 
     class Connection:
         def __enter__(self):
-            state.events.append("connection_enter")
             return self
 
         def cursor(self):
@@ -68,7 +76,6 @@ def recording_database(monkeypatch):
 
         def __exit__(self, exc_type, exc_value, traceback):
             state.events.append(("connection_exit", exc_type))
-            return False
 
     monkeypatch.setattr(edi_parser, "database_connection", Connection)
     return state
@@ -115,7 +122,6 @@ def postgres_connection(monkeypatch):
         create_statement, "CREATE TEMP TABLE quarantine_table", 1
     )
 
-    # Missing application settings or an unavailable database fail rather than skip.
     with (
         database_connection() as connection,
         connection.transaction(force_rollback=True),

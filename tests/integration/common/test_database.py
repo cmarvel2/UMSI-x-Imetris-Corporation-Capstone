@@ -1,9 +1,4 @@
-"""Real PostgreSQL tests using the application's POSTGRES_* settings.
-
-The prototype database must be running. Settings come from the process environment
-or the existing .env, with localhost:5433 as the host-run fallback. A temporary
-table and forced rollback isolate rows.
-"""
+"""PostgreSQL tests use a session-local quarantine table and roll back."""
 
 from uuid import UUID
 
@@ -25,12 +20,10 @@ def test_quarantine_round_trips_reason_array_and_database_defaults(postgres_conn
 
     edi_parser.quarantine(source, reasons)
 
-    with postgres_connection.cursor() as cursor:
-        cursor.execute(
-            "SELECT quarantine_id, quarantined_at, source_file, quarantine_reason, "
-            "resolution_status, resolved_at FROM quarantine_table"
-        )
-        rows = cursor.fetchall()
+    rows = postgres_connection.execute(
+        "SELECT quarantine_id, quarantined_at, source_file, quarantine_reason, "
+        "resolution_status, resolved_at FROM quarantine_table"
+    ).fetchall()
     assert len(rows) == 1
     identifier, timestamp, stored_source, stored_reasons, status, resolved_at = rows[0]
     assert isinstance(identifier, UUID)
@@ -44,7 +37,7 @@ def test_quarantine_round_trips_reason_array_and_database_defaults(postgres_conn
 def test_invalid_edi_flows_from_pyx12_into_real_quarantine_table(
     postgres_connection, scenario_file
 ):
-    path = scenario_file("formatting_errors", corrected=True)
+    path = scenario_file("formatting_errors")
 
     assert edi_parser.ingest_edi_files(str(path)) is None
 
